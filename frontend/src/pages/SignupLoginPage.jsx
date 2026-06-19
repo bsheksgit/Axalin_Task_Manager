@@ -66,9 +66,6 @@ export default function SignupLoginPage() {
           alt="Axalin Consultancy Logo"
           className="mx-auto h-16 w-auto mb-6 border-2"
         />
-        {/* <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-xl font-bold text-white">
-          A
-        </div> */}
         <h2 className="mt-6 text-center text-2xl font-bold tracking-tight text-gray-900">
           {isLogin ? "Sign in to your account" : "Create a new account"}
         </h2>
