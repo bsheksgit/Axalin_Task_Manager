@@ -6,6 +6,8 @@ import SignupLoginPage from "./pages/SignupLoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snackbar from "./components/Snackbar";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorPage from "./components/ErrorPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,38 +22,24 @@ function App() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Snackbar />
-          <Routes>
-            <Route path="/login" element={<SignupLoginPage />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route
-              path="*"
-              element={
-                <div className="flex min-h-screen items-center justify-center bg-gray-50">
-                  <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-900">404</h1>
-                    <p className="mt-2 text-gray-500">Page not found</p>
-                    <a
-                      href="/dashboard"
-                      className="mt-4 inline-block text-indigo-600 hover:text-indigo-500"
-                    >
-                      Go to Dashboard
-                    </a>
-                  </div>
-                </div>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
+        <ErrorBoundary>
+          <BrowserRouter>
+            <Snackbar />
+            <Routes>
+              <Route path="/login" element={<SignupLoginPage />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="*" element={<ErrorPage code="404" />} />
+            </Routes>
+          </BrowserRouter>
+        </ErrorBoundary>
       </QueryClientProvider>
     </Provider>
   );

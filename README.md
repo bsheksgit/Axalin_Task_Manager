@@ -16,6 +16,7 @@ A full-stack **Task Dependency Management** application built with **React 19** 
 - **Relationships View** — Visual overview of all task dependencies in a table format
 - **Responsive UI** — Clean, professional light theme with Tailwind CSS
 - **Snackbar Notifications** — Real-time feedback for all user actions (success/error)
+- **Error Boundary** — Global error catching with a reusable error page (404, 403, 500, generic)
 
 ---
 
@@ -307,6 +308,23 @@ A Redux-based snackbar system provides real-time feedback for all user actions:
 - **Red** for errors (login failed, task creation failed, etc.)
 - Auto-dismisses after 3 seconds
 - Slide-in animation from the right
+
+### Global Error Handling: Error Boundary + Error Page
+
+The frontend includes a two-part error handling system:
+
+**Error Boundary** (`ErrorBoundary.jsx`) — A React class component that wraps the entire application in `App.jsx`. It catches JavaScript errors thrown during rendering in any child component. If a component crashes, instead of showing a blank white screen, it displays a friendly error page with a "Try Again" button that resets the error state and re-renders the app. Errors are also logged to the console for debugging.
+
+**Error Page** (`ErrorPage.jsx`) — A reusable error page component that supports multiple error scenarios:
+
+| Code      | Scenario                        | Icon | Actions Available                        |
+| --------- | ------------------------------- | ---- | ---------------------------------------- |
+| `404`     | Page not found (unknown routes) | 🔍   | Go to Dashboard, Refresh Page            |
+| `403`     | Access denied                   | 🔒   | Go to Dashboard, Refresh Page            |
+| `500`     | Server / rendering error        | ⚠️   | Go to Dashboard, Try Again, Refresh Page |
+| `generic` | Catch-all fallback              | ❗   | Go to Dashboard, Try Again, Refresh Page |
+
+The 404 route in `App.jsx` uses `<ErrorPage code="404" />` instead of inline HTML, providing a consistent look and feel across all error states.
 
 ### Containerization: Multi-Stage Docker Build
 
