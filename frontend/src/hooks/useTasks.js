@@ -1,8 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
 import { taskApi } from "../api/taskApi";
+import { showSnackbar } from "../store/snackbarSlice";
 
 export function useTasks() {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
   // Get all tasks
   const tasksQuery = useQuery({
@@ -23,6 +26,13 @@ export function useTasks() {
     mutationFn: taskApi.createTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      dispatch(
+        showSnackbar({ message: "Task created successfully", type: "success" }),
+      );
+    },
+    onError: (error) => {
+      const message = error.response?.data?.detail || "Failed to create task";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 
@@ -32,6 +42,13 @@ export function useTasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["dependencies"] });
+      dispatch(
+        showSnackbar({ message: "Task updated successfully", type: "success" }),
+      );
+    },
+    onError: (error) => {
+      const message = error.response?.data?.detail || "Failed to update task";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 
@@ -41,6 +58,13 @@ export function useTasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["dependencies"] });
+      dispatch(
+        showSnackbar({ message: "Task deleted successfully", type: "success" }),
+      );
+    },
+    onError: (error) => {
+      const message = error.response?.data?.detail || "Failed to delete task";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 
@@ -51,6 +75,17 @@ export function useTasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["dependencies"] });
+      dispatch(
+        showSnackbar({
+          message: "Dependency added successfully",
+          type: "success",
+        }),
+      );
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.detail || "Failed to add dependency";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 
@@ -61,6 +96,17 @@ export function useTasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["dependencies"] });
+      dispatch(
+        showSnackbar({
+          message: "Dependency removed successfully",
+          type: "success",
+        }),
+      );
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.detail || "Failed to remove dependency";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 

@@ -17,7 +17,7 @@ export default function Header() {
       {/* Content - relative to appear above the overlay */}
       <div className="relative mx-auto flex max-w-7xl items-start px-6 py-6">
         <div>
-          <h1 className="text-xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-white">
             Axalin Task Management Solutions
           </h1>
           <p className="text-xs text-gray-200">

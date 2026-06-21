@@ -5,6 +5,7 @@ import { store } from "./store";
 import SignupLoginPage from "./pages/SignupLoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Snackbar from "./components/Snackbar";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,7 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          <Snackbar />
           <Routes>
             <Route path="/login" element={<SignupLoginPage />} />
             <Route

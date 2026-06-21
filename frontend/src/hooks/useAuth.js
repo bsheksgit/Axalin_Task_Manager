@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { authApi } from "../api/authApi";
 import { setUser, clearUser, setLoading } from "../store/authSlice";
+import { showSnackbar } from "../store/snackbarSlice";
 
 export function useAuth() {
   const dispatch = useDispatch();
@@ -45,7 +46,17 @@ export function useAuth() {
     mutationFn: authApi.login,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
+      dispatch(
+        showSnackbar({
+          message: `Welcome back, ${data.user.username}!`,
+          type: "success",
+        }),
+      );
       navigate("/dashboard");
+    },
+    onError: (error) => {
+      const message = error.response?.data?.detail || "Login failed";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 
@@ -54,7 +65,17 @@ export function useAuth() {
     mutationFn: authApi.signup,
     onSuccess: (data) => {
       dispatch(setUser(data.user));
+      dispatch(
+        showSnackbar({
+          message: "Account created successfully!",
+          type: "success",
+        }),
+      );
       navigate("/dashboard");
+    },
+    onError: (error) => {
+      const message = error.response?.data?.detail || "Signup failed";
+      dispatch(showSnackbar({ message, type: "error" }));
     },
   });
 
@@ -64,7 +85,13 @@ export function useAuth() {
     onSuccess: () => {
       dispatch(clearUser());
       queryClient.clear();
+      dispatch(
+        showSnackbar({ message: "Logged out successfully", type: "success" }),
+      );
       navigate("/login");
+    },
+    onError: () => {
+      dispatch(showSnackbar({ message: "Logout failed", type: "error" }));
     },
   });
 
