@@ -13,6 +13,12 @@ const errorConfig = {
     message: "You don't have permission to access this page.",
     icon: "🔒",
   },
+  422: {
+    title: "422",
+    subtitle: "Validation error",
+    message: "The server couldn't process your request due to invalid data.",
+    icon: "📋",
+  },
   500: {
     title: "500",
     subtitle: "Something went wrong",
@@ -27,8 +33,9 @@ const errorConfig = {
   },
 };
 
-export default function ErrorPage({ code = "generic", onRetry }) {
+export default function ErrorPage({ code = "generic", message, onRetry }) {
   const config = errorConfig[code] || errorConfig.generic;
+  const displayMessage = message || config.message;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -39,7 +46,7 @@ export default function ErrorPage({ code = "generic", onRetry }) {
           {config.subtitle}
         </p>
         <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
-          {config.message}
+          {displayMessage}
         </p>
         <div className="mt-6 flex items-center justify-center gap-3">
           <Link

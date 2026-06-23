@@ -74,8 +74,11 @@ export function useAuth() {
       navigate("/dashboard");
     },
     onError: (error) => {
-      const message = error.response?.data?.detail || "Signup failed";
-      dispatch(showSnackbar({ message, type: "error" }));
+      // Don't show snackbar for 422 errors - the ErrorPage handles those
+      if (error.response?.status !== 422) {
+        const message = error.response?.data?.detail || "Signup failed";
+        dispatch(showSnackbar({ message, type: "error" }));
+      }
     },
   });
 

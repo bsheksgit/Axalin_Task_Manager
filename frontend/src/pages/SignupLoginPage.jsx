@@ -31,8 +31,13 @@ export default function SignupLoginPage() {
       return;
     }
 
-    if (!isLogin && !username.trim()) {
-      setError("Username is required for signup");
+    if (!isLogin && username.trim().length < 3) {
+      setError("Username must be at least 3 characters long");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
       return;
     }
 
@@ -47,9 +52,12 @@ export default function SignupLoginPage() {
         });
       }
     } catch (err) {
-      const message =
-        err.response?.data?.detail || "An error occurred. Please try again.";
-      setError(message);
+      // Don't show inline error for 422 - the ErrorPage handles those
+      if (err.response?.status !== 422) {
+        const message =
+          err.response?.data?.detail || "An error occurred. Please try again.";
+        setError(message);
+      }
     }
   };
 
